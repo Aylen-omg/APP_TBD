@@ -35,22 +35,49 @@ function validateForm() {
     return true;
   }
 
-  
-function mostrarVista(vista) {
-  // Ocultar todas las vistas
-  var vistas = document.getElementsByClassName('vista');
-  for (var i = 0; i < vistas.length; i++) {
-    vistas[i].style.display = 'none';
-    form.style.display = 'none';
+const steps = Array.from(document.querySelectorAll('form .step'));
+const nextBtn = document.querySelectorAll('form .next-btn');
+const prevBtn = document.querySelectorAll('form .previous-btn');
+const form = document.querySelector('form');
 
+nextBtn.forEach(button=>{
+  button.addEventListener('click', ()=>{
+    changeStep('next');
+  })
+})
+
+prevBtn.forEach(button=>{
+  button.addEventListener('click', ()=>{
+    changeStep('prev');
+  })
+})
+
+form.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const inputs =[];
+  form.querySelectorAll('input').forEach(input=>{
+    const {name,value} = input;
+    inputs.push({name,value})
+  })
+  console.log(inputs)
+  form.reset();
+  let index = 0;
+  const active = document.querySelector('form .step.active');
+  index = steps.indexOf(active);
+  steps[index].classList.remove('active');
+  steps[0].classList.add('active');
+})
+
+function changeStep(btn){
+  let index = 0;
+  const active = document.querySelector('form .step.active');
+  index = steps.indexOf(active);
+  steps[index].classList.remove('active');
+  if(btn === 'next'){
+    index ++;
+  }else if(btn === 'prev'){
+    index --;
   }
-  // Mostrar la vista seleccionada
-  var vistaSeleccionada = document.getElementsByClassName('vista' + vista);
-  for (var i = 0; i < vistaSeleccionada.length; i++) {
-    vistaSeleccionada[i].style.display = 'block';
-    var formularioSeleccionado = vistaSeleccionada[i].getElementsByTagName('form')[0];
-    if (formularioSeleccionado) {
-      formularioSeleccionado.style.display = 'block';
-    }
-  }
+  steps[index].classList.add('active')
+  console.log(index)
 }
