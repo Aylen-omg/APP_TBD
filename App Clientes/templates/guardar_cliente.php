@@ -1,28 +1,25 @@
 <?php
+include("conectar.php");
 
-$server = 'nombre_servidor';
-$database = 'nombre_base_datos';
-$username = 'nombre_usuario';
-$password = 'contraseña';
+$ciCliente=$_POST["ciCliente"];
+$nombreCliente=$_POST["nombreCliente"];
+$nroHijos=$_POST["nroHijos"];
+$estadoCivil=$_POST["estadoCivil"];
+$correoCliente=$_POST["correoCliente"];
+$tieneTrabajo=$_POST["tieneTrabajo"];
+$direccionCliente=$_POST["direccionCliente"];
 
-$ciCliente = $_POST['ciCliente'];
-$nombreCliente = $_POST['nombreCliente'];
-$nroHijos = $_POST['nroHijos'];
-$estadoCivil = $_POST['estadoCivil'];
-$correoCliente = $_POST['correoCliente'];
-$tieneTrabajo = $_POST['tieneTrabajo'];
-$direccionCliente = $_POST['direccionCliente'];
+$query="INSERT INTO CLIENTE (ciCliente,nombreCliente,nroHijos,estadoCivil,correoCliente,tieneTrabajo,direcCliente) VALUES ($ciCliente,$nombreCliente,$nroHijos,$estadoCivil,$correoCliente,$tieneTrabajo,$direccionCliente)";
 
+$stmt=sqlsrv_prepare($con, $query);
 
-
-$conn = new PDO("odbc:Driver={ODBC Driver 17 for SQL Server};Server=$server;Database=$database", $username, $password);
-
-$query = "INSERT INTO CLIENTE (ciCliente, nombreCliente, nroHijos, estadoCivil, correoCliente, tieneTrabajo, direccionCliente) VALUES (?, ?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($query);
-$stmt->execute([$ciCliente, $nombreCliente, $nroHijos, $estadoCivil, $correoCliente, $tieneTrabajo, $direccionCliente]);
+if (sqlsrv_execute($stmt)) {
+    echo "Se insertó el valor correctamente.";
+} else {
+    echo "Se insertó el valor incorrectamente.";
+}
 
 // Cerrar la conexión con la base de datos
-$conn = null;
+//sqlsrv_close($con);
 
-echo "Datos del cliente guardados correctamente.";
 ?>
